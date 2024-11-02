@@ -393,9 +393,7 @@ function toggleAnswer(element) {
 
 
 
-
-
-let currentUtterancea = null; // Variable para almacenar la utterance actual
+let currentUtterancee = null; // Variable para almacenar la utterance actual
 
 // Función para leer el contenido de cada post del blog
 function speakBlogPost(postType) {
@@ -414,7 +412,7 @@ function speakBlogPost(postType) {
             speechText = `Características del Café Energizante. Nuestro café se elabora con granos de alta calidad, seleccionados a mano. El proceso de cold brew resalta los sabores suaves, creando una bebida más rica y menos ácida. Además, es versátil, permitiendo disfrutarlo tanto frío como caliente, y se puede personalizar a tus preferencias.`;
             break;
         case 'recipes':
-            speechText = `Metodo Cold Brew. Prueba un smoothie energizante combinando nuestro café con plátano y espinacas. Otra receta fácil es el café helado con chocolate. También puedes experimentar con un café con especias, añadiendo canela o vainilla. ¡Las posibilidades son infinitas!`;
+            speechText = `Método Cold Brew. El cold brew es conocido por sus características distintivas. Prueba un smoothie energizante combinando nuestro café con plátano y espinacas. Otra receta fácil es el café helado con chocolate. También puedes experimentar con un café con especias, añadiendo canela o vainilla. ¡Las posibilidades son infinitas!`;
             break;
     }
 
@@ -443,7 +441,14 @@ function showPost(postType) {
                        <p>Además, nuestro café energizante es versátil, lo que permite disfrutarlo tanto frío como caliente, y se puede personalizar con leche, edulcorantes o sabores adicionales para adaptarse a tus preferencias.</p>`;
             break;
         case 'recipes':
-            content = `<h2>Metodo Cold Brew</h2>
+            content = `<h2>Método Cold Brew</h2>
+                       <p>El cold brew es conocido por sus características distintivas:</p>
+                       <ul>
+                           <li><strong>Sabor Suave y Menos Ácido:</strong> Debido a la baja temperatura del agua, el cold brew suele tener un sabor más suave y menos ácido en comparación con el café preparado con agua caliente. Esto se debe a que la extracción a temperaturas más bajas no libera ciertos ácidos y compuestos amargos.</li>
+                           <li><strong>Perfil de Sabor Complejo:</strong> El método cold brew permite extraer una variedad de sabores complejos del café, lo que puede resultar en una bebida más rica y aromática.</li>
+                           <li><strong>Concentrado Versátil:</strong> El café cold brew se puede preparar como un concentrado que luego se puede diluir con agua, leche o crema según el gusto.</li>
+                           <li><strong>Tiempo de Preparación:</strong> La preparación del cold brew requiere un tiempo de infusión de al menos 12 a 24 horas, lo que lo diferencia de métodos de preparación más rápidos.</li>
+                       </ul>
                        <p>Prueba un smoothie energizante combinando nuestro café con plátano y espinacas para un desayuno delicioso y nutritivo. Simplemente mezcla 1 taza de café frío, 1 plátano, 1 taza de espinacas y un poco de yogur.</p>
                        <p>Otra receta fácil es el café helado con chocolate: mezcla 1 taza de café frío con 1 cucharada de cacao en polvo y hielo. Agrega un poco de leche para un toque cremoso y disfruta de un refresco energético.</p>
                        <p>También puedes experimentar con un café con especias, añadiendo canela o vainilla para un sabor diferente. ¡Las posibilidades son infinitas!</p>`;
@@ -467,9 +472,7 @@ function stopReading() {
 function hidePost() {
     document.getElementById('blog-content').style.display = 'none';
     // Opcional: Detener la lectura al cerrar el post
-    if (currentUtterance) {
-        window.speechSynthesis.cancel();
-    }
+    stopReading(); // Usar la función stopReading para detener la lectura
 }
 
 
@@ -538,50 +541,8 @@ function detenerLectura() {
 
 
 
-
-
-
-// Función para leer el producto actual
-function leerProductoActual() {
-    const synth = window.speechSynthesis;
-    const product = products[currentIndex];
-    const title = product.querySelector('h3').innerText; // Título del producto
-    const description = product.querySelector('p').innerText; // Descripción del producto
-    const price = product.querySelector('.product-price').innerText; // Precio del producto
-
-    const texto = `${title}. ${description}. Precio: ${price}`;
-    
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = 'es-ES';
-
-    synth.cancel(); // Cancela cualquier síntesis en curso
-    synth.speak(utterance); // Lee el texto
-}
-
-
-
-
-
-
-let currentIndexa = 0; // Asegúrate de tener esta variable definida
+let currentIndexv = 0; // Asegúrate de tener esta variable definida
 const products = document.querySelectorAll('.product-item'); // Asegúrate de que esta selección sea correcta
-
-// Función para leer el producto actual
-function leerProductoActual() {
-    const synth = window.speechSynthesis;
-    const product = products[currentIndex];
-    const title = product.querySelector('h3').innerText; // Título del producto
-    const description = product.querySelector('p').innerText; // Descripción del producto
-    const price = product.querySelector('.product-price').innerText; // Precio del producto
-
-    const texto = `${title}. ${description}. Precio: ${price}`;
-    
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = 'es-ES';
-
-    synth.cancel(); // Cancela cualquier síntesis en curso
-    synth.speak(utterance); // Lee el texto
-}
 
 // Variable para almacenar la utterance actual
 let currentUtterance = null; 
@@ -592,8 +553,7 @@ function speakProductInfo(index) {
         window.speechSynthesis.cancel(); // Cancela la lectura anterior
     }
 
-    const productItems = document.querySelectorAll('.product-item');
-    const product = productItems[index];
+    const product = products[index];
     const productName = product.querySelector('h3').textContent;
     const productDescription = product.querySelector('p').textContent;
     const productPrice = product.querySelector('.product-price').textContent;
@@ -604,7 +564,12 @@ function speakProductInfo(index) {
     window.speechSynthesis.speak(currentUtterance);
 }
 
-// Al mover el carrusel, llama a speakProductInfo con el índice actual
+// Función para manejar la acción de leer el producto actual
+function leerProductoActual() {
+    speakProductInfo(currentIndex); // Llama a la función para leer el producto actual
+}
+
+// Al mover el carrusel, muestra el producto actual
 function moveCarousel(direction) {
     currentIndex += direction;
 
@@ -617,9 +582,6 @@ function moveCarousel(direction) {
 
     // Mostrar el producto actual
     showProduct(currentIndex);
-
-    // Llama a la función para leer el producto actual
-    speakProductInfo(currentIndex);
 }
 
 // Función para mostrar el producto en el carrusel
@@ -632,12 +594,17 @@ function showProduct(index) {
     });
 }
 
+// Detener cualquier lectura en curso
 function stopSpeech() {
     window.speechSynthesis.cancel(); // Detiene cualquier lectura en curso
 }
 
+// Asumiendo que tienes un botón con el ID 'readButton' para iniciar la lectura
+document.getElementById('readButton').addEventListener('click', leerProductoActual);
 
 
+// Declara currentUtterance globalmente
+let currentUtterancem = null;
 
 function speakAboutUs() {
     // Detener la utterance anterior si está en curso
@@ -646,12 +613,19 @@ function speakAboutUs() {
     }
 
     const nosotrosText = document.getElementById('nosotros-text');
-    const h2 = nosotrosText.querySelector('h2').textContent;
-    const paragraphs = Array.from(nosotrosText.querySelectorAll('p')).map(p => p.textContent).join(' ');
- 
+    if (!nosotrosText) return; // Verifica que el elemento existe
 
+    // Obtener texto de h2 y párrafos
+    const h2 = nosotrosText.querySelector('h2') ? nosotrosText.querySelector('h2').textContent : '';
+    const paragraphs = Array.from(nosotrosText.querySelectorAll('p')).map(p => p.textContent).join(' ');
+
+    // Obtener texto de los elementos h3
+    const h3s = Array.from(nosotrosText.querySelectorAll('h3')).map(h3 => h3.textContent).join(' ');
+
+    // Combinar todo el texto
     const speechText = `${h2}. ${paragraphs} ${h3s}.`;
 
+    // Crear la utterance y hablar
     currentUtterance = new SpeechSynthesisUtterance(speechText);
     window.speechSynthesis.speak(currentUtterance);
 }
@@ -659,8 +633,10 @@ function speakAboutUs() {
 // Llama a esta función cuando la sección "Nosotros" sea visible
 function showNosotrosSection() {
     const nosotrosSection = document.getElementById('nosotros');
-    nosotrosSection.scrollIntoView({ behavior: 'smooth' }); // Desplaza hacia la sección "Nosotros"
-    speakAboutUs(); // Llama a la función para leer la sección "Nosotros"
+    if (nosotrosSection) {
+        nosotrosSection.scrollIntoView({ behavior: 'smooth' }); // Desplaza hacia la sección "Nosotros"
+        speakAboutUs(); // Llama a la función para leer la sección "Nosotros"
+    }
 }
 
 function stopSpeecha() {
@@ -671,6 +647,10 @@ function stopSpeecha() {
 
 
 
+
+// Declara una sola variable para la utterance
+let currentUtteranceg = null;
+
 function speakColdBrewProcess() {
     // Detener la utterance anterior si está en curso
     if (currentUtterance) {
@@ -678,18 +658,25 @@ function speakColdBrewProcess() {
     }
 
     const procesoSection = document.querySelector('.fashion-section');
-    const h2 = procesoSection.querySelector('.section-title h2').textContent;
+    if (!procesoSection) return; // Verifica que el elemento existe
+
+    const h2Element = procesoSection.querySelector('.section-title h2');
+    const h2 = h2Element ? h2Element.textContent : ''; // Asegura que el h2 exista
+
     const items = Array.from(procesoSection.querySelectorAll('.item'));
-    
+
     // Reúne el texto de cada item
     const itemTexts = items.map(item => {
-        const title = item.querySelector('.description .section-title h3').textContent;
-        const description = item.querySelector('p').textContent;
+        const titleElement = item.querySelector('.description .section-title h3');
+        const title = titleElement ? titleElement.textContent : ''; // Asegura que el h3 exista
+        const descriptionElement = item.querySelector('p');
+        const description = descriptionElement ? descriptionElement.textContent : ''; // Asegura que el párrafo exista
         return `${title}. ${description}`;
     }).join(' ');
 
     const speechText = `${h2}. ${itemTexts}`;
 
+    // Crear la utterance y hablar
     currentUtterance = new SpeechSynthesisUtterance(speechText);
     window.speechSynthesis.speak(currentUtterance);
 }
@@ -697,13 +684,15 @@ function speakColdBrewProcess() {
 // Llama a esta función cuando la sección "Proceso" sea visible
 function showProcesoSection() {
     const procesoSection = document.getElementById('proceso');
-    procesoSection.scrollIntoView({ behavior: 'smooth' }); // Desplaza hacia la sección "Proceso"
-    speakColdBrewProcess(); // Llama a la función para leer la sección "Proceso"
+    if (procesoSection) {
+        procesoSection.scrollIntoView({ behavior: 'smooth' }); // Desplaza hacia la sección "Proceso"
+        speakColdBrewProcess(); // Llama a la función para leer la sección "Proceso"
+    }
 }
 
 function stopProcesoSpeech() {
-    if (procesoUtterance) {
-        window.speechSynthesis.cancel(); // Detiene la lectura de la sección "Proceso"
-        procesoUtterance = null; // Restablece la variable de utterance específica
+    if (currentUtterance) {
+        window.speechSynthesis.cancel(); // Detiene cualquier lectura en curso
+        currentUtterance = null; // Restablece la variable de utterance
     }
 }
